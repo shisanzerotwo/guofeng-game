@@ -243,7 +243,12 @@ class Game {
         });
 
         document.getElementById('hintBtn').addEventListener('click', () => {
-            this.showHint();
+            aiAssistant.toggleChat();
+            setTimeout(() => {
+                const input = document.getElementById('aiInput');
+                input.value = '给我一个提示';
+                aiAssistant.sendMessage();
+            }, 300);
         });
 
         document.getElementById('nextBtn').addEventListener('click', () => {
@@ -642,6 +647,13 @@ class Game {
             }
             
             delete this.weakPoints[`${this.currentChapter}_${originalIndex}`];
+            
+            const levelData = this.getLevelData();
+            if (levelData && levelData.culturalInfo) {
+                setTimeout(() => {
+                    aiAssistant.showCulturalInfo(levelData.culturalInfo);
+                }, 1500);
+            }
         } else {
             icon.textContent = '😢';
             icon.className = 'result-icon fail';
@@ -750,7 +762,8 @@ const gameData = {
             correctAnswer: 0,
             feedbackCorrect: '正确！这是李白的《静夜思》',
             feedbackWrong: '再想想，这是表达思乡之情的诗句',
-            hints: ['这是唐代诗人李白的名作', '表达的是思乡之情', '最后一句是"低头思故乡"']
+            hints: ['这是唐代诗人李白的名作', '表达的是思乡之情', '最后一句是"低头思故乡"'],
+            culturalInfo: '《静夜思》是唐代诗人李白的代表作之一，创作于公元726年。这首诗语言质朴无华，却意境深远，表达了诗人客居他乡时对故乡的深切思念。全诗仅二十字，却成为中国文学史上最著名的思乡诗篇，被广泛传诵。'
         },
         {
             title: '诗词作者匹配',
@@ -774,7 +787,8 @@ const gameData = {
             correctAnswer: 1,
             feedbackCorrect: '正确！这是王安石的思乡之作',
             feedbackWrong: '再想想，"照我还"暗示了归乡的愿望',
-            hints: ['关键词是"照我还"', '表达的是思乡之情']
+            hints: ['关键词是"照我还"', '表达的是思乡之情'],
+            culturalInfo: '这句诗出自北宋政治家、文学家王安石的《泊船瓜洲》。王安石在推行变法失败后辞官归乡，途中停泊在瓜洲，看到江南春色，不禁思念起故乡江宁（今南京）。诗中"绿"字用得极为传神，将春风化作有生命力的动词，成为千古名句。'
         },
         {
             title: '诗人典故',
@@ -789,7 +803,8 @@ const gameData = {
             correctAnswer: 2,
             feedbackCorrect: '正确！贾岛骑驴作诗，斟酌"推"与"敲"',
             feedbackWrong: '不是这位诗人，想想"僧推月下门"的典故',
-            hints: ['与"僧推月下门"有关', '这位诗人以苦吟著称']
+            hints: ['与"僧推月下门"有关', '这位诗人以苦吟著称'],
+            culturalInfo: '推敲典故出自唐代诗人贾岛。相传贾岛骑驴作诗时，想到"鸟宿池边树，僧推月下门"一句，又想把"推"改为"敲"，犹豫不决。他骑着驴一边比划一边思考，不小心冲撞了时任京兆尹的韩愈的仪仗队。韩愈问明缘由后，帮他分析认为"敲"字更好，因为"敲"有声音，更能衬托月夜的宁静。从此"推敲"成为反复斟酌、精益求精的代名词。'
         },
         {
             title: '诗词填空 - 登鹳雀楼',
@@ -2667,12 +2682,44 @@ class AIAssistant {
             return this.getSmallTalkResponse(lowerMessage);
         }
         
+        const hintResponse = this.getHintResponse(lowerMessage);
+        if (hintResponse) {
+            return hintResponse;
+        }
+        
         const culturalAnswer = this.getCulturalAnswer(lowerMessage);
         if (culturalAnswer) {
             return culturalAnswer;
         }
         
         return this.getDefaultResponse();
+    }
+
+    getHintResponse(message) {
+        if (/提示|hint|帮助|怎么答|怎么选/.test(message)) {
+            if (!game || !game.getLevelData) {
+                return '抱歉，当前没有题目信息。请先选择一个关卡开始游戏！';
+            }
+            
+            const levelData = game.getLevelData();
+            if (!levelData) {
+                return '抱歉，当前没有题目信息。请先选择一个关卡开始游戏！';
+            }
+            
+            if (!levelData.hints || game.hintCount >= levelData.hints.length) {
+                return '这道题已经没有更多提示了哦！试试看根据自己的知识作答吧~';
+            }
+            
+            const currentHint = levelData.hints[game.hintCount];
+            game.hintCount++;
+            game.score = Math.max(0, game.score - 5);
+            game.saveData();
+            game.updateStats();
+            
+            return `好的！我来给你一个提示：${currentHint}\n（温馨提示：使用提示会扣除5分哦~）`;
+        }
+        
+        return null;
     }
 
     isGreeting(message) {
@@ -2801,6 +2848,13 @@ class AIAssistant {
             '您的问题很有趣！我会努力学习更多知识来回答您~'
         ];
         return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    showCulturalInfo(info) {
+        this.showChat();
+        setTimeout(() => {
+            this.addMessage(info, 'bot');
+        }, 300);
     }
 }
 
