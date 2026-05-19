@@ -15,7 +15,6 @@ class Game {
     init() {
         this.setupAuthListeners();
         this.initAuth();
-        this.loadData();
         this.setupEventListeners();
         this.createParticles();
         this.hideLoading();
@@ -25,6 +24,12 @@ class Game {
         const savedUser = localStorage.getItem('currentUser');
         if (savedUser) {
             this.currentUser = JSON.parse(savedUser);
+            const userData = localStorage.getItem(`userData_${this.currentUser.username}`);
+            if (!userData) {
+                this.resetUserData();
+            } else {
+                this.loadUserData(this.currentUser.username);
+            }
             this.hideLogin();
             this.showUserInfo();
         } else {
@@ -40,6 +45,11 @@ class Game {
                 'player': '123456'
             });
             localStorage.setItem('gameUsers', users);
+            
+            const oldGameData = localStorage.getItem('guofengGameData');
+            if (oldGameData && !localStorage.getItem('userData_player')) {
+                localStorage.setItem('userData_player', oldGameData);
+            }
         }
     }
 
@@ -68,10 +78,50 @@ class Game {
         if (users[username] && users[username] === password) {
             this.currentUser = { username };
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+            
+            const userData = localStorage.getItem(`userData_${username}`);
+            if (!userData) {
+                this.resetUserData();
+            } else {
+                this.loadUserData(username);
+            }
+            
             this.hideLogin();
             this.showUserInfo();
         } else {
             this.showLoginError('用户名或密码错误，请重新输入！');
+        }
+    }
+
+    resetUserData() {
+        this.score = 0;
+        this.streak = 0;
+        this.completedLevels = {};
+        this.weakPoints = {};
+        this.saveData();
+    }
+
+    loadUserData(username) {
+        const saved = localStorage.getItem(`userData_${username}`);
+        if (saved) {
+            const data = JSON.parse(saved);
+            this.score = data.score || 0;
+            this.streak = data.streak || 0;
+            this.completedLevels = data.completedLevels || {};
+            this.weakPoints = data.weakPoints || {};
+        }
+        this.updateStats();
+        this.updateProgress();
+    }
+
+    saveData() {
+        if (this.currentUser) {
+            localStorage.setItem(`userData_${this.currentUser.username}`, JSON.stringify({
+                score: this.score,
+                streak: this.streak,
+                completedLevels: this.completedLevels,
+                weakPoints: this.weakPoints
+            }));
         }
     }
 
@@ -191,28 +241,6 @@ class Game {
         if (logoutBtn) {
             logoutBtn.style.display = 'block';
         }
-    }
-
-    loadData() {
-        const saved = localStorage.getItem('guofengGameData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            this.score = data.score || 0;
-            this.streak = data.streak || 0;
-            this.completedLevels = data.completedLevels || {};
-            this.weakPoints = data.weakPoints || {};
-        }
-        this.updateStats();
-        this.updateProgress();
-    }
-
-    saveData() {
-        localStorage.setItem('guofengGameData', JSON.stringify({
-            score: this.score,
-            streak: this.streak,
-            completedLevels: this.completedLevels,
-            weakPoints: this.weakPoints
-        }));
     }
 
     updateStats() {
