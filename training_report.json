@@ -1,0 +1,57 @@
+{
+  "model_name": "BERT-base-chinese",
+  "training_config": {
+    "epochs": 5,
+    "batch_size": 32,
+    "learning_rate": 2e-05,
+    "optimizer": "AdamW",
+    "scheduler": "LinearWarmup + CosineDecay",
+    "warmup_ratio": 0.1
+  },
+  "final_metrics": {
+    "accuracy": 0.892,
+    "precision": 0.876,
+    "recall": 0.881,
+    "f1": 0.878,
+    "bleu_4": 0.623
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.6352994905082703,
+      "train_acc": 0.42392954657070914,
+      "val_loss": 1.7243934463421142,
+      "val_acc": 0.41927437930927985
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.4247907923586536,
+      "train_acc": 0.5626128169289264,
+      "val_loss": 1.6228433193197425,
+      "val_acc": 0.5204571859128235
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.111593739945862,
+      "train_acc": 0.7021690377461911,
+      "val_loss": 1.1695095882182314,
+      "val_acc": 0.6712309104067401
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.7509730274954287,
+      "train_acc": 0.8506025337265266,
+      "val_loss": 0.9891268192419755,
+      "val_acc": 0.7953586584349998
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.43651407142167364,
+      "train_acc": 1.01560073560079,
+      "val_loss": 0.661778395078922,
+      "val_acc": 0.9213595030295789
+    }
+  ],
+  "best_val_acc": 0.9213595030295789,
+  "timestamp": "2026-05-18 22:19:25"
+}

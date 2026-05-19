@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>国风解谜闯关 - 娱乐学文化 闯关传文脉</title><link rel="stylesheet" href="style.css"><link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet"></head><body><div class="game-container" id="gameContainer"><div class="background-effects"></div><div class="ink-particles"></div><div class="login-error-modal" id="loginErrorModal">
+            <div class="login-error-card">
+                <div class="login-error-icon">❌</div>
+                <div class="login-error-title">登录失败</div>
+                <div class="login-error-message" id="loginErrorMessage">用户名或密码错误</div>
+                <button class="login-error-btn" id="loginErrorBtn">确定</button>
+            </div>
+        </div>
+        <div class="login-screen" id="loginScreen">
+            <div class="login-decor top-left">
+                <span class="decor-symbol">◆</span>
+                <span class="decor-symbol">◇</span>
+                <span class="decor-symbol">◆</span>
+            </div>
+            <div class="login-decor top-right">
+                <span class="decor-symbol">◇</span>
+                <span class="decor-symbol">◆</span>
+                <span class="decor-symbol">◇</span>
+            </div>
+            <div class="login-decor bottom-left">
+                <span class="decor-symbol">◆</span>
+                <span class="decor-symbol">◇</span>
+                <span class="decor-symbol">◆</span>
+            </div>
+            <div class="login-decor bottom-right">
+                <span class="decor-symbol">◇</span>
+                <span class="decor-symbol">◆</span>
+                <span class="decor-symbol">◇</span>
+            </div>
+            <div class="login-card">
+                <div class="card-corner top-left-corner"></div>
+                <div class="card-corner top-right-corner"></div>
+                <div class="card-corner bottom-left-corner"></div>
+                <div class="card-corner bottom-right-corner"></div>
+                <div class="login-icon">🎮</div>
+                <div class="login-logo">国风解谜闯关</div>
+                <div class="login-subtitle">娱乐学文化 · 闯关传文脉</div>
+                <div class="login-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-icon">⚔️</span>
+                    <span class="divider-line"></span>
+                </div>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label class="form-label">用户名</label>
+                        <input type="text" class="form-input" id="usernameInput" placeholder="请输入用户名" value="player">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">密码</label>
+                        <input type="password" class="form-input" id="passwordInput" placeholder="请输入密码" value="123456">
+                    </div>
+                    <button class="login-btn" id="loginBtn">
+                        <span class="btn-icon">🔐</span>
+                        <span>登 录</span>
+                    </button>
+                    <button class="register-btn" id="registerBtn">
+                        <span class="btn-icon">📝</span>
+                        <span>注 册</span>
+                    </button>
+                    <div class="login-hint">默认账号：player / 123456</div>
+                </div>
+            </div>
+        </div><div class="game-header">
+            <div class="logo">国风解谜闯关</div>
+            <div class="subtitle">娱乐学文化 · 闯关传文脉</div>
+        </div><div class="main-menu" id="mainMenu">
+            <div class="menu-card">
+                <h2>选择闯关章节</h2>
+                <div class="chapter-grid">
+                    <button class="chapter-btn" data-chapter="poetry">
+                        <div class="chapter-icon">诗</div>
+                        <div class="chapter-name">诗词文脉</div>
+                        <div class="chapter-progress" id="progress-poetry">进度: 0/33</div>
+                    </button>
+                    <button class="chapter-btn" data-chapter="craft">
+                        <div class="chapter-icon">艺</div>
+                        <div class="chapter-name">非遗工艺</div>
+                        <div class="chapter-progress" id="progress-craft">进度: 0/27</div>
+                    </button>
+                    <button class="chapter-btn" data-chapter="folk">
+                        <div class="chapter-icon">俗</div>
+                        <div class="chapter-name">传统民俗</div>
+                        <div class="chapter-progress" id="progress-folk">进度: 0/32</div>
+                    </button>
+                    <button class="chapter-btn" data-chapter="pattern">
+                        <div class="chapter-icon">纹</div>
+                        <div class="chapter-name">古典纹样</div>
+                        <div class="chapter-progress" id="progress-pattern">进度: 0/27</div>
+                    </button>
+                    <button class="chapter-btn" data-chapter="artifact">
+                        <div class="chapter-icon">器</div>
+                        <div class="chapter-name">传统器物</div>
+                        <div class="chapter-progress" id="progress-artifact">进度: 0/30</div>
+                    </button>
+                    <button class="chapter-btn" data-chapter="xinjiang">
+                        <div class="chapter-icon">疆</div>
+                        <div class="chapter-name">新疆风情</div>
+                        <div class="chapter-progress" id="progress-xinjiang">进度: 0/25</div>
+                    </button>
+                </div>
+                <div class="menu-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalScore">0</span>
+                        <span class="stat-label">总积分</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="completedLevels">0</span>
+                        <span class="stat-label">已完成关卡</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="streak">0</span>
+                        <span class="stat-label">连续闯关</span>
+                    </div>
+                </div>
+                <button class="back-btn" id="backBtn" style="display: none;">返回主菜单</button>
+            </div>
+        </div><div class="game-area" id="gameArea" style="display: none;">
+            <button class="home-btn" id="homeBtn">🏠 返回主页</button>
+            <div class="level-header">
+                <div class="level-title" id="levelTitle"></div>
+                <div class="level-progress-bar">
+                    <div class="level-progress-fill" id="levelProgressFill"></div>
+                </div>
+            </div>
+            <div class="question-area" id="questionArea"></div>
+            <div class="options-area" id="optionsArea"></div>
+            <div class="hint-system">
+                <button class="hint-btn" id="hintBtn">AI智能提示</button>
+                <div class="hint-content" id="hintContent" style="display: none;"></div>
+            </div>
+            <div class="feedback-area" id="feedbackArea"></div>
+            <div class="level-result" id="levelResult" style="display: none;">
+                <div class="result-icon" id="resultIcon"></div>
+                <div class="result-text" id="resultText"></div>
+                <div class="result-score" id="resultScore"></div>
+                <button class="next-btn" id="nextBtn">下一关</button>
+                <button class="retry-btn" id="retryBtn">重试</button>
+            </div>
+        </div><div class="loading-screen" id="loadingScreen">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">加载中...</div>
+        </div><div class="ai-assistant-container" id="aiAssistantContainer" style="display: none;">
+            <div class="ai-header">
+                <div class="ai-avatar">🤖</div>
+                <div class="ai-title">AI文化助手</div>
+                <button class="ai-close-btn" id="aiCloseBtn">✕</button>
+            </div>
+            <div class="ai-chat-area" id="aiChatArea">
+                <div class="ai-welcome">
+                    <div class="ai-message ai-bot">
+                        <div class="ai-msg-avatar">🤖</div>
+                        <div class="ai-msg-content">你好！我是你的AI文化助手，有什么问题可以问我哦~</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" class="ai-input" id="aiInput" placeholder="输入你的问题...">
+                <button class="ai-send-btn" id="aiSendBtn">发送</button>
+            </div>
+        </div><button class="ai-toggle-btn" id="aiToggleBtn">🤖 助手</button><div class="register-modal" id="registerModal">
+            <div class="register-card">
+                <button class="register-close" id="registerClose">✕</button>
+                <h3>用户注册</h3>
+                <div class="login-form">
+                    <div class="form-group">
+                        <label class="form-label">用户名</label>
+                        <input type="text" class="form-input" id="regUsername" placeholder="请输入用户名">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">密码</label>
+                        <input type="password" class="form-input" id="regPassword" placeholder="请输入密码">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">确认密码</label>
+                        <input type="password" class="form-input" id="regConfirmPassword" placeholder="请确认密码">
+                    </div>
+                    <button class="login-btn" id="submitRegister">注 册</button>
+                    <div class="register-success" id="registerSuccess"></div>
+                    <div class="register-error" id="registerError"></div>
+                </div>
+            </div>
+        </div></div><script src="game.js"></script></body></html>
